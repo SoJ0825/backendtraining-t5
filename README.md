@@ -1,64 +1,103 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400"></a></p>
+# 以 Laravel 實作許願池的後端 API
 
-<p align="center">
-<a href="https://travis-ci.org/laravel/framework"><img src="https://travis-ci.org/laravel/framework.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+## 題目：
 
-## About Laravel
+團隊正在開發一套軟體系統，用來給組織的成員們寫下許願小卡，
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+請嘗試基於這個 Repository，以 Laravel Framework 開發出許願池系統需要的後端 API，並通過所有自動化測試。
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+---
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+### 許願小卡
 
-## Learning Laravel
+使用者在註冊後，可以登入系統，來輸入自己想要提出的願望 ~~(會不會實現就看緣分了)~~，
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+由於個人隱私，只能看到自己的許願小卡，且可以隨時修改與刪除自己的小卡。
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains over 2000 video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+新增完小卡後，使用者可以標記小卡為「送出」，代表把這張小卡送進許願池裡，而已送出的許願卡不能被收回、修改、刪除，
 
-## Laravel Sponsors
+如果想要收回某張誤送的小卡，需要聯繫許願池小精靈 aka. 管理員，請管理員協助收回。
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the Laravel [Patreon page](https://patreon.com/taylorotwell).
+### 許願池小精靈
 
-### Premium Partners
+管理員負責管理許願池的和平，可以查看所有許願小卡及使用者，除了使用者的密碼以外。
 
-- **[Vehikl](https://vehikl.com/)**
-- **[Tighten Co.](https://tighten.co)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Cubet Techno Labs](https://cubettech.com)**
-- **[Cyber-Duck](https://cyber-duck.co.uk)**
-- **[Many](https://www.many.co.uk)**
-- **[Webdock, Fast VPS Hosting](https://www.webdock.io/en)**
-- **[DevSquad](https://devsquad.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel/)**
-- **[OP.GG](https://op.gg)**
-- **[WebReinvent](https://webreinvent.com/?utm_source=laravel&utm_medium=github&utm_campaign=patreon-sponsors)**
-- **[Lendio](https://lendio.com)**
+為了避免濫用，可以啟用與停用指定的使用者，
+也可以協助修改使用者的資料與密碼，
 
-## Contributing
+並根據使用者的要求，將指定的已送出小卡回復為未送出。
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+---
 
-## Code of Conduct
+## 規格
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+### 功能
 
-## Security Vulnerabilities
+1. 註冊登入
+2. 許願小卡
+    - C 新增一筆自己的小卡
+    - R 讀取 (列表與指定小卡)
+    - U 更新指定小卡
+    - D 刪除指定小卡
+    - 送出：標記指定的小卡為「送出」
+3. 管理員
+    - 使用者
+        - 查看所有使用者 (列表與指定使用者)
+        - 修改使用者
+            - 各項資料
+            - 密碼
+            - 為啟用
+            - 為停用
+    - 許願小卡
+        - 查看所有的小卡
+        - 收回指定的已送出小卡
+4. 資料庫 (一定要需紀錄的欄位)
+    - `users` 表格
+        - `email` 欄位
+        - `password` 欄位
+    - `wishes` 表格
+        - `message` 欄位
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+### API 文件
 
-## License
+啟動伺服器後，可進入 [`/api/documentation`](http://localhost:8000/api/documentation) 以 Swagger-UI 查看。
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+---
+
+## 完成條件
+
+1. 在這個 Repo 中，實現上述所有的功能。
+1. 滿足 API 文件中的規格。
+1. 通過所有自動化測試。
+1. 建立 PR，並取得 2 個 Approve。
+
+---
+
+## 自動化測試
+
+安裝完 PHP、Composer、專案的相依套件後，可以用下面的指令執行自動化測試。
+
+### 版本限制
+
+- PHP: ^8.0
+- Laravel: ^9
+
+(`^` 的意義請參考 [StackOverflow - What's the difference between tilde(~) and caret(^) in package.json?](https://stackoverflow.com/questions/22343224/whats-the-difference-between-tilde-and-caret-in-package-json/22345808))
+
+### 指令
+
+- 安裝套件
+```bash
+composer install
+```
+
+- 執行所有測試
+```bash
+composer test
+# 或 php artisan test
+```
+
+- 執行單一檔案的測試
+```bash
+php artisan test tests/API/SomeTest.php
+```

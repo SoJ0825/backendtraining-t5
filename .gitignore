@@ -1,3 +1,6 @@
+.php-cs-fixer.cache
+/bootstrap/cache/*.php
+
 /node_modules
 /public/hot
 /public/storage
